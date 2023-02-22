@@ -19,11 +19,11 @@ class Database:
         cursor.execute('select * from History')
         his = cursor.fetchall()
         cursor.close()
-        return(his)
+        return (his)
 
     def log_his(self, login, time, status):
         cursor = self.connection.cursor()
-        cursor.execute(f"INSERT INTO history VALUES (NULL, %s, NULL, %s, %s)", (time, status,login))
+        cursor.execute(f"INSERT INTO history VALUES (NULL, %s, NULL, %s, %s)", (time, status, login))
         self.connection.commit()
 
     def logout_his(self, login, time, status):
@@ -36,7 +36,7 @@ class Database:
         cursor.execute('select * from employee')
         emps = cursor.fetchall()
         cursor.close()
-        return(emps)
+        return (emps)
 
     def get_clnt(self):
         cursor = self.connection.cursor()
@@ -55,20 +55,32 @@ class Database:
             clients.append(str(i)[2:-3])
         return clients
 
-    def get_clnt_code(self,name):
+    def get_clnt_code(self, name):
         cursor = self.connection.cursor()
-        cursor.execute(f"SELECT `cl_Id` FROM clients WHERE cl_name='{name}'")
-        clnt = cursor.fetchall()
+        cursor.execute(f"SELECT `cl_Id` FROM client WHERE cl_name='{name}'")
+        clnt = cursor.fetchone()
         cursor.close()
-        return clnt
+        return clnt[0]
+    def add_clnt(self, name, data, birth, addres, mail):
+        cursor = self.connection.cursor()
+        cursor.execute(f"INSERT INTO client VALUES (NULL, %s, %s, %s, %s, %s, NULL)", (name, data, birth, addres, mail))
+        cursor.close()
+        self.connection.commit()
 
     def get_ord(self):
         cursor = self.connection.cursor()
         cursor.execute('select * from orders')
         ord = cursor.fetchall()
         cursor.close()
-        return(ord)
+        return (ord)
 
+    def add_ord(self, code, date, time, client, serv, status, close_time, rent_time, emp_id):
+        cursor = self.connection.cursor()
+        cursor.execute(f"INSERT INTO orders VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                       (code, date, time, client, serv, status, close_time, rent_time, emp_id))
+
+        cursor.close()
+        self.connection.commit()
     def get_serv(self):
         cursor = self.connection.cursor()
         cursor.execute('select * from services')
@@ -77,7 +89,7 @@ class Database:
         return serv
 
     def get_serv_title(self):
-        services =[]
+        services = []
         cursor = self.connection.cursor()
         cursor.execute(f"select serv_Title from services")
         serv = cursor.fetchall()
@@ -89,9 +101,15 @@ class Database:
     def get_serv_code(self, title):
         cursor = self.connection.cursor()
         cursor.execute(f"select serv_id from services WHERE serv_Title='{title}'")
-        serv = cursor.fetchall()
+        serv = cursor.fetchone()
         cursor.close()
-        return serv
+        return serv[0]
+    def add_serv(self, title, code, price):
+        cursor = self.connection.cursor()
+        cursor.execute(f"INSERT INTO services VALUES (NULL, %s, %s, %s)", (title, code, price))
+
+        cursor.close()
+        self.connection.commit()
 
     def check_login(self):
         log = []
@@ -113,12 +131,6 @@ class Database:
                 log.append(j)
         return log
 
-    def add_ord(self, code, date, time, client, serv, emp_id):
-        cursor = self.connection.cursor()
-        cursor.execute(f"INSERT INTO orders VALUES (NULL, %s, %s, %s, %s, %s, NULL, NULL, NULL, %s)", (code, date,time,client, serv,emp_id))
-
-        cursor.close()
-        self.connection.commit()
 
 if __name__ == '__main__':
     db = Database()

@@ -1335,7 +1335,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Расходы</string>
+           <string>услуги</string>
           </property>
          </widget>
         </item>
@@ -1410,6 +1410,21 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="add_serv">
+        <property name="font">
+         <font>
+          <family>Comic Sans MS</family>
+          <pointsize>10</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Добавить услугу</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
